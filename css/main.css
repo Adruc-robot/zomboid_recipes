@@ -290,26 +290,7 @@ textarea {
 .header {
   grid-area: header;
 }
-/*.clickFilter:hover, .foodItem:hover {
-  background-color: lightgray;
-  cursor: pointer;
-}*/
-/*.clickFilter:hover ul, .foodItem:hover ul {
-  display: block;
-}*/
 
-/*.clickFilter ul, .foodItem ul {
-  display: none;
-}*/
-/*#item {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-#item div {
-  padding: .5rem;
-}*/
 #item {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -324,7 +305,21 @@ textarea {
 .dragLanding::after {
   content: 'drop here';
 }
+.dragILanding {
+  border-style: dashed;
+}
 .emptyOLLI::after {
   content: 'drop ingredient here'
+}
+ol li {
+  margin: 0.25rem 0 0.25rem 0;
+}
+.gFlex {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  /*justify-content: flex-start;*/
+  justify-content: space-between;
+  align-content: center;
 }
 /* custom styles end */
