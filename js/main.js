@@ -1,4 +1,5 @@
 const tallyArray = ["Calories","Carbohydrates","HungerChange","Lipids","Proteins"]
+let bOver = false
 //mimics jquerys document ready begin
 let domReady = function(callback) {
     document.readyState === "interactive" || document.readyState === "complete" ? callback() : document.addEventListener("DOMContentLoaded", callback);
@@ -59,6 +60,7 @@ async function main() {
         parentEl.setAttribute('draggable',true)
         parentEl.addEventListener('dragstart', dragStart)
         parentEl.addEventListener('dragend', dragEnd)
+        parentEl.addEventListener('drop', dragDrop)
         //title
         let titleEl = document.createElement('h3')
         /*titleEl.innerHTML = '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ulNumber' + i + '" aria-expanded="false" aria-controls="ulNumber' + i + '>' + item[2].substring(0,item[2].indexOf('{')).trim() + '</button>'*/
@@ -82,11 +84,11 @@ async function main() {
             if (attrib) {
                 //li's
                 let liEl = document.createElement('li')
-                
-                attribEl.appendChild(liEl)
                 let attribSpl = attrib.split(item[5])
+                liEl.classList.add(attribSpl[0].trim())
+                attribEl.appendChild(liEl)
                 let leftSpan = document.createElement('span')
-                leftSpan.classList.add(attribSpl[0].trim(), 'afterColon', 'keyPair')
+                leftSpan.classList.add('afterColon', 'keyPair')
                 leftSpan.innerText = attribSpl[0].trim()
                 liEl.appendChild(leftSpan)
                 let rightSpan = document.createElement('span')
@@ -97,7 +99,10 @@ async function main() {
         })
         i++
     })
-    
+    document.getElementById('selectedThings').addEventListener('dragenter',dragEnter)
+    document.getElementById('selectedThings').addEventListener('dragleave',dragLeave)
+    document.getElementById('selectedThings').addEventListener('dragover',dragOver)
+
 }
 async function getThings(path) {
     let theObject = await fetch(path)
@@ -107,7 +112,7 @@ async function getThings(path) {
 function dragStart() {
     //console.log('drag started')
     document.getElementById('selectedThings').classList.add('dragLanding')
-    console.log(this.classList)
+    //console.log(this.classList)
     let hideItems = document.querySelectorAll('.' + this.classList[0])
     hideItems.forEach(item => {
         if (item !== this) {
@@ -117,20 +122,54 @@ function dragStart() {
 
 }
 function dragEnd() {
-    console.log('drag ended')
+    let landingPad = document.getElementById('selectedThings')
+    if (bOver) {
+        //do things
+        landingPad.innerHTML = ''
+        landingPad.appendChild(this)
+        makeIngredientSlots(this)
+    } else {
+        landingPad.classList.remove('dragLanding')
+        let hideItems = document.querySelectorAll('.' + this.classList[0])
+        hideItems.forEach(item => {
+            if (item !== this) {
+                item.classList.remove('noShow')
+            }
+        })
+    }
     document.getElementById('selectedThings').classList.remove('dragLanding')
-    let hideItems = document.querySelectorAll('.' + this.classList[0])
-    hideItems.forEach(item => {
-        if (item !== this) {
-            item.classList.remove('noShow')
-        }
-    })
 }
+function dragDrop() {
+    //console.log('drag drop')
+}
+function dragEnter() {
+    //console.log('drag enter')
+    bOver = true
+    //console.log(bOver)
+}
+function dragLeave() {
+    //console.log('drag leave')
+    bOver = false
+    //console.log(bOver)
+}
+function dragOver(e) {
+    e.preventDefault()
+    //console.log('drag over')
+}
+function makeIngredientSlots(parentItem) {
+    console.log(parentItem)
+    let ingUL = document.createElement('ul')
+    document.getElementById('selectedThings').appendChild(ingUL)
+    let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText.parseInt() 
+    for (i = 0; i < loopVal; i++) {
+        let ingLI = document.createElement('li')
+        ingLI.innerText = 'Drag over ingredient #' + (i + 1)
+        ingUL.appendChild(ingLI)
+    }
 
-
-
+}
 let redData = new Array()
-function testFolderContents(filePath) {
+function         testFolderContents(filePath) {
     let folderContents = new XMLHttpRequest()
     folderContents.open("GET", filePath, true)
     folderContents.onreadystatechange = function () {
