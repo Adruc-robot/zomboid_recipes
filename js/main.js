@@ -160,7 +160,12 @@ function makeIngredientSlots(parentItem) {
     console.log(parentItem)
     let ingUL = document.createElement('ul')
     document.getElementById('selectedThings').appendChild(ingUL)
-    let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText.parseInt() 
+    document.getElementById('selectedThings').removeEventListener('dragenter',dragEnter)
+    document.getElementById('selectedThings').removeEventListener('dragleave',dragLeave)
+    document.getElementById('selectedThings').removeEventListener('dragover',dragOver)
+    //let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText.parseInt() 
+    //console.log(parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText)
+    let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText
     for (i = 0; i < loopVal; i++) {
         let ingLI = document.createElement('li')
         ingLI.innerText = 'Drag over ingredient #' + (i + 1)
