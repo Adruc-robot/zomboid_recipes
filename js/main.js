@@ -153,7 +153,7 @@ function dragREnd() {
     document.getElementById('selectedThings').classList.remove('dragLanding')
 }
 function dragIEnd() {
-
+    
 }
 function dragEnter() {
     bOver = true
