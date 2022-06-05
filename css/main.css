@@ -283,6 +283,7 @@ textarea {
 .recipeContents, .foodItemContents, .sumContainer {
   list-style-type: none;
 }
+
 .noShow {
   display: none;
 }
@@ -322,5 +323,8 @@ textarea {
 }
 .dragLanding::after {
   content: 'drop here';
+}
+.emptyOLLI::after {
+  content: 'drop ingredient here'
 }
 /* custom styles end */

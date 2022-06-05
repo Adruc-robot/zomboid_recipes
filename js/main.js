@@ -58,9 +58,13 @@ async function main() {
         document.getElementById(item[0]).appendChild(parentEl)
         parentEl.classList.add(item[1], 'accordion-item')
         parentEl.setAttribute('draggable',true)
-        parentEl.addEventListener('dragstart', dragStart)
-        parentEl.addEventListener('dragend', dragEnd)
-        parentEl.addEventListener('drop', dragDrop)
+        if (item[1] == 'recipe') {
+            parentEl.addEventListener('dragstart', dragRStart)
+            parentEl.addEventListener('dragend', dragREnd)
+        } else {
+            parentEl.addEventListener('dragstart', dragIStart)
+            parentEl.addEventListener('dragend', dragIEnd)
+        }
         //title
         let titleEl = document.createElement('h3')
         /*titleEl.innerHTML = '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ulNumber' + i + '" aria-expanded="false" aria-controls="ulNumber' + i + '>' + item[2].substring(0,item[2].indexOf('{')).trim() + '</button>'*/
@@ -109,19 +113,28 @@ async function getThings(path) {
     let theString = await theObject.text()
     return theString
 }
-function dragStart() {
-    //console.log('drag started')
+function dragRStart() {
+    //When dragging recipes
     document.getElementById('selectedThings').classList.add('dragLanding')
-    //console.log(this.classList)
     let hideItems = document.querySelectorAll('.' + this.classList[0])
     hideItems.forEach(item => {
         if (item !== this) {
             item.classList.add('noShow')
         }
     })
-
+    document.getElementById('evolvedrecipe').classList.add('noShow')
 }
-function dragEnd() {
+function dragIStart() {
+    //When dragging ingredients
+    let olLis = document.querySelectorAll('#selectedThings ol li')
+    olLis.forEach(li => {
+        if (li.innerText == '') {
+            li.classList.add('dragLanding')
+        }
+    })
+}
+function dragREnd() {
+    //When dragging ingredients
     let landingPad = document.getElementById('selectedThings')
     if (bOver) {
         //do things
@@ -139,37 +152,26 @@ function dragEnd() {
     }
     document.getElementById('selectedThings').classList.remove('dragLanding')
 }
-function dragDrop() {
-    //console.log('drag drop')
+function dragIEnd() {
+
 }
 function dragEnter() {
-    //console.log('drag enter')
     bOver = true
-    //console.log(bOver)
 }
 function dragLeave() {
-    //console.log('drag leave')
     bOver = false
-    //console.log(bOver)
 }
 function dragOver(e) {
     e.preventDefault()
-    //console.log('drag over')
 }
 function makeIngredientSlots(parentItem) {
-    console.log(parentItem)
-    let ingUL = document.createElement('ul')
-    document.getElementById('selectedThings').appendChild(ingUL)
-    document.getElementById('selectedThings').removeEventListener('dragenter',dragEnter)
-    document.getElementById('selectedThings').removeEventListener('dragleave',dragLeave)
-    document.getElementById('selectedThings').removeEventListener('dragover',dragOver)
-    //let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText.parseInt() 
-    //console.log(parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText)
+    let ingOL = document.createElement('ol')
+    document.getElementById('selectedThings').appendChild(ingOL)
     let loopVal = parentItem.querySelectorAll('.MaxItems .valuePair')[0].innerText
     for (i = 0; i < loopVal; i++) {
         let ingLI = document.createElement('li')
-        ingLI.innerText = 'Drag over ingredient #' + (i + 1)
-        ingUL.appendChild(ingLI)
+        ingLI.classList.add('emptyOLLI')
+        ingOL.appendChild(ingLI)
     }
 
 }
