@@ -69,7 +69,6 @@ async function main() {
         }
         //title
         let titleEl = document.createElement('h3')
-        /*titleEl.innerHTML = '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ulNumber' + i + '" aria-expanded="false" aria-controls="ulNumber' + i + '>' + item[2].substring(0,item[2].indexOf('{')).trim() + '</button>'*/
         titleEl.classList.add(item[3], "accordion-header")
         parentEl.appendChild(titleEl)
         //accordion button
@@ -78,7 +77,7 @@ async function main() {
         titBTN.dataset.bsToggle = 'collapse'
         titBTN.dataset.bsTarget = '#ulNumber' + idI
         titBTN.innerText = item[2].substring(0,item[2].indexOf('{')).trim()
-        titBTN.type = "button"
+        titBTN.type = 'button'
         titleEl.appendChild(titBTN)
         //ul
         let attribEl = document.createElement('ul')
@@ -121,10 +120,10 @@ function dragRStart() {
     let hideItems = document.querySelectorAll('.' + this.classList[0])
     hideItems.forEach(item => {
         if (item !== this) {
+            console.log(this)
             item.classList.add('noShow')
         }
     })
-    document.getElementById('evolvedrecipe').classList.add('noShow')
 }
 function dragIStart() {
     //When dragging ingredients
@@ -148,14 +147,13 @@ function dragREnd() {
         document.getElementById('selectedThings').removeEventListener('dragenter',dragEnter)
         document.getElementById('selectedThings').removeEventListener('dragleave',dragLeave)
         document.getElementById('selectedThings').removeEventListener('dragover',dragOver)
+        document.getElementById('evolvedrecipe').classList.add("noShow")
         makeIngredientSlots(this)
     } else {
         landingPad.classList.remove('dragLanding')
         let hideItems = document.querySelectorAll('.' + this.classList[0])
         hideItems.forEach(item => {
-            if (item !== this) {
-                item.classList.remove('noShow')
-            }
+            item.classList.remove('noShow')
         })
     }
     document.getElementById('selectedThings').classList.remove('dragLanding')
@@ -178,13 +176,14 @@ function dragIEnd() {
         stuffHolder.classList.add('gFlex')
         overObject.appendChild(stuffHolder)
         stuffHolder.appendChild(thisClone)
-        //overObject.appendChild(thisClone)
         overObject.classList.remove('emptyOLLI')
         //add a button to remove the ingredient
         let removeBTN = document.createElement('button')
         removeBTN.classList.add('btn', 'btn-danger')
         removeBTN.innerText = 'Remove'
+        removeBTN.type = 'button'
         stuffHolder.appendChild(removeBTN)
+        removeBTN.addEventListener('click', removeIngredient)
         //overObject.appendChild(removeBTN)
         tallyTheThings()
     }
@@ -234,29 +233,30 @@ function tallyTheThings() {
         let itemDatas = document.querySelectorAll(".selectedItem ." + item)
         let sumTotal = 0
         itemDatas.forEach(itemData => {
-            //console.log(typeof itemData.querySelectorAll(".valuePair")[0].innerText)
             sumTotal = sumTotal + parseFloat(itemData.querySelectorAll(".valuePair")[0].innerText)
-            console.log(item + ": " + sumTotal)
         })
-        
-        if (sumTotal) {
-            //there is a element for this item
-            let checkItem = document.querySelector(".sum" + item)
-            if (!checkItem) {
-                console.log()
-                //there isn't, create the it
-                checkItem = document.createElement("li")
-                checkItem.classList.add("sum" + item)
-                let keyPair = document.createElement("span")
-                keyPair.innerText = item
-                keyPair.classList.add("keyPair","afterColon")
-                let valuePair = document.createElement("span")
-                valuePair.classList.add("valuePair")
-                checkItem.appendChild(keyPair)
-                checkItem.appendChild(valuePair)
-                sumContainer.appendChild(checkItem)
-            }
-            document.querySelectorAll(".sum" + item + " .valuePair")[0].innerText = sumTotal
+        let checkItem = document.querySelector(".sum" + item)
+        if (!checkItem) {
+            //there isn't, create the it
+            checkItem = document.createElement("li")
+            checkItem.classList.add("sum" + item)
+            let keyPair = document.createElement("span")
+            keyPair.innerText = item
+            keyPair.classList.add("keyPair","afterColon")
+            let valuePair = document.createElement("span")
+            valuePair.classList.add("valuePair")
+            checkItem.appendChild(keyPair)
+            checkItem.appendChild(valuePair)
+            sumContainer.appendChild(checkItem)
         }
+        document.querySelectorAll(".sum" + item + " .valuePair")[0].innerText = sumTotal
     })
+}
+function removeIngredient() {
+    console.log('doot')
+    //console.log(this.parentElement.parentElement)
+    this.removeEventListener('click',removeIngredient)
+    this.parentElement.parentElement.classList.add('emptyOLLI')
+    this.parentElement.remove()
+    tallyTheThings()
 }

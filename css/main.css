@@ -266,12 +266,12 @@ textarea {
 
   display: grid; 
   grid-template-columns: 1fr 1fr 1fr; 
-  grid-template-rows: .01fr .99fr;
+  grid-template-rows: 10vh 90vh;
   gap: 2px 2px; 
   grid-template-areas:
   "header header header"
   ". . . ";
-
+  height: 100vh;
 }
 
 .afterColon::after {
@@ -291,10 +291,8 @@ textarea {
   grid-area: header;
 }
 
-#item {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-items: stretch;
+#item, #evolvedrecipe {
+  overflow-y: scroll;
 }
 #selectedThings li .Type, #selectedThings li .DisplayCategory, #selectedThings li .Weight, #selectedThings li .Icon, #selectedThings li .CannedFood, #selectedThings li .EatType, #selectedThings li .EvolvedRecipeName, #selectedThings li .FoodType, #selectedThings li .Packaged, #selectedThings li .DaysFresh, #selectedThings li .DaysTotallyRotten, #selectedThings li .StaticModel, #selectedThings li .WorldStaticModel, #selectedThings li .ReplaceOnUse, #selectedThings li .EvolvedRecipe,#selectedThings li .BadCold, #selectedThings li .BadInMicrowave, #selectedThings li .DangerousUncooked, #selectedThings li .GoodHot, #selectedThings li .IsCookable, #selectedThings li .MinutesToCook, #selectedThings li .MinutesToBurn, #selectedThings li .HerbalistType, #selectedThings li .OnEat {
   display: none;
