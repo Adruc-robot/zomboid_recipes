@@ -28,26 +28,31 @@ async function main() {
             let parentClass = ''
             let childClass = ''
             let titleClass = ''
+            let addInString = ''
             if (fileText.includes('BaseItem:')) {
-                splitString = 'evolvedrecipe'
+                //splitString = 'evolvedrecipe'
+                splitString = /\s+evolvedrecipe\s+/
                 filterString = 'BaseItem'
                 delimiter = ':'
                 parentClass = "recipe"
                 childClass = "recipeContents"
                 titleClass = "recipeTitle"
+                addInString = 'evolvedrecipe'
             } else {
-                splitString = 'item'
-                filterString = 'EvolvedRecipe'
+                splitString = /\s+item\s+/
+                //filterString = 'EvolvedRecipe'
+                filterString = 'DisplayName'
                 delimiter = '='
                 parentClass = "foodItem"
                 childClass = "foodItemContents"
                 titleClass = "foodItemTitle"
+                addInString = "item"
             }
             let tmpArr = fileText.split(splitString)
             tmpArr.forEach(tmpEl => {
                 if (tmpEl.includes(filterString)) {
-                    //                  0           1           2       3          4            5
-                    allArray.push( [splitString, parentClass, tmpEl, titleClass, childClass, delimiter])
+                    //                  0           1           2       3          4            5           6
+                    allArray.push( [splitString, parentClass, tmpEl, titleClass, childClass, delimiter, addInString])
                 }
             })
         }
@@ -57,57 +62,94 @@ async function main() {
     allArray.forEach(item => {
         //main div
         let  parentEl = document.createElement("div")
-        document.getElementById(item[0]).appendChild(parentEl)
-        parentEl.classList.add(item[1], 'accordion-item')
-        parentEl.setAttribute('draggable',true)
-        if (item[1] == 'recipe') {
-            parentEl.addEventListener('dragstart', dragRStart)
-            parentEl.addEventListener('dragend', dragREnd)
-        } else {
-            parentEl.addEventListener('dragstart', dragIStart)
-            parentEl.addEventListener('dragend', dragIEnd)
-        }
+        document.getElementById(item[6]).appendChild(parentEl)
+        parentEl.classList.add(item[1])
+        //icon
+        let icon = document.createElement('img')
+        icon.classList.add("item-icon")
+        parentEl.appendChild(icon)
         //title
         let titleEl = document.createElement('h3')
-        titleEl.classList.add(item[3], "accordion-header")
+        titleEl.classList.add(item[3])
+        let itemName = item[2].substring(0,item[2].indexOf('{')).trim()
+        titleEl.innerText = itemName
         parentEl.appendChild(titleEl)
-        //accordion button
-        let titBTN = document.createElement('button')
-        titBTN.classList.add('accordion-button','collapsed')
-        titBTN.dataset.bsToggle = 'collapse'
-        titBTN.dataset.bsTarget = '#ulNumber' + idI
-        titBTN.innerText = item[2].substring(0,item[2].indexOf('{')).trim()
-        titBTN.type = 'button'
-        titleEl.appendChild(titBTN)
         //ul
         let attribEl = document.createElement('ul')
-        attribEl.classList.add(item[4], 'accordion-body', 'accordion-collapse', 'collapse')
-        attribEl.id = 'ulNumber' + idI
+        attribEl.classList.add(item[4])
         parentEl.appendChild(attribEl)
+        //create a "name" attribute
+        let nameAttrib = document.createElement('li')
+        nameAttrib.classList.add('item-name', itemName.replaceAll(' ','_'))
+        attribEl.appendChild(nameAttrib)
+        let leftSpan = document.createElement('span')
+        leftSpan.classList.add('afterColon','keyPair')
+        leftSpan.innerText = "item-name"
+        nameAttrib.appendChild(leftSpan)
+        let rightSpan = document.createElement('span')
+        rightSpan.classList.add('valuePair')
+        rightSpan.innerText = itemName
+        nameAttrib.appendChild(rightSpan)
         let attribArr = item[2].substring(item[2].indexOf('{') + 1 ,item[2].indexOf('}') - 1).trim().split(',')
         attribArr.forEach(attrib => {
             if (attrib) {
                 //li's
                 let liEl = document.createElement('li')
                 let attribSpl = attrib.split(item[5])
-                liEl.classList.add(attribSpl[0].trim())
+                //console.log(attribSpl[0])
+                let attribName = attribSpl[0].trim()
+                liEl.classList.add(attribName)
                 attribEl.appendChild(liEl)
                 let leftSpan = document.createElement('span')
                 leftSpan.classList.add('afterColon', 'keyPair')
-                leftSpan.innerText = attribSpl[0].trim()
+                leftSpan.innerText = attribName
                 liEl.appendChild(leftSpan)
                 let rightSpan = document.createElement('span')
                 rightSpan.classList.add('valuePair')
-                rightSpan.innerText = attribSpl[1].trim()
+                let attribVal = attribSpl[1].trim()
+                rightSpan.innerText = attribVal
                 liEl.appendChild(rightSpan)
+                if (attribName == 'ResultItem') {
+                    //need to get the icon from here
+                    //let tmpFlter = new RegExp(attribVal + "\\r")
+                    //console.log(tmpFlter)
+                    console.log(`looking for: ${attribVal}`)
+                    let doots = allArray.filter(function(v,i) {
+                        
+                        return v[2].substring(0,v[2].indexOf('{')).trim() === attribVal
+                    })
+                    doots.forEach(doot => {
+                        if (doot != item) {
+                            console.log('fullstring')
+                            console.log(doot[2].substring(0,50))
+                            /*console.log(doot[2].indexOf('Icon = '))
+                            console.log(doot[2].substring(doot[2].indexOf('Icon = '),doot[2].length).indexOf(',') + doot[2].indexOf('Icon = '))*/
+                            //console.log(doot[2].substring(doot[2].indexOf(/\s+Icon =\s+/),doot[2].substring(doot[2].indexOf(/\s+Icon =\s+/),doot[2].length).indexOf(',')).trim())
+                            console.log(doot[2].substring(doot[2].indexOf('Icon = '),doot[2].length))
+                            console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length))
+                            //console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).substring(0,doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).indexOf(',')))
+                            console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).indexOf(','))
+                        }
+                    })
+                    //console.log(doot)
+                    /*console.log(allArray.filter(function(v,i) {
+                        //return v[2] === attribVal
+                        //console.log(v)
+                    }))*/
+                }
             }
         })
         idI++
     })
-    document.getElementById('selectedThings').addEventListener('dragenter',dragEnter)
+    //removal of drag
+    /*document.getElementById('selectedThings').addEventListener('dragenter',dragEnter)
     document.getElementById('selectedThings').addEventListener('dragleave',dragLeave)
-    document.getElementById('selectedThings').addEventListener('dragover',dragOver)
-
+    document.getElementById('selectedThings').addEventListener('dragover',dragOver)*/
+    //set up filters
+    let filters = document.querySelectorAll('.general-search')
+    filters.forEach(filter => {
+        filter.addEventListener('keyup',searchFilter)
+    })
 }
 async function getThings(path) {
     let theObject = await fetch(path)
@@ -120,7 +162,7 @@ function dragRStart() {
     let hideItems = document.querySelectorAll('.' + this.classList[0])
     hideItems.forEach(item => {
         if (item !== this) {
-            console.log(this)
+
             item.classList.add('noShow')
         }
     })
@@ -253,10 +295,20 @@ function tallyTheThings() {
     })
 }
 function removeIngredient() {
-    console.log('doot')
-    //console.log(this.parentElement.parentElement)
+
     this.removeEventListener('click',removeIngredient)
     this.parentElement.parentElement.classList.add('emptyOLLI')
     this.parentElement.remove()
     tallyTheThings()
+}
+function searchFilter() {
+    let filterItems = document.querySelectorAll(`${this.dataset.adrucFtarget}`)
+    filterItems.forEach(filterItem => {
+        let filterCompare = filterItem.querySelectorAll(`${this.dataset.adrucCompareLocation}`)[0].innerText.toLowerCase()
+        if (filterCompare.indexOf(this.value.toLowerCase()) == -1) {
+            filterItem.classList.add("noShow")
+        } else {
+            filterItem.classList.remove("noShow")
+        }
+    })
 }
