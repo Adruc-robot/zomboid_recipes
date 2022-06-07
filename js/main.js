@@ -149,24 +149,7 @@ async function main() {
                         }
 
                     }
-                    doots.forEach(doot => {
-                        if (doot != item) {
-                            /*let thing1 = `/img/Item_${doot[2].split('Icon = ')[1].substring(0,doot[2].split('Icon = ')[1].indexOf(','))}.png`
-                            //test if it's there
-                            let checker = getThings(path)
-                            console.log(checker)
-                            icon.src = thing1*/
 
-
-                            
-                            //console.log(thing1)
-                        }
-                    })
-                    //console.log(doot)
-                    /*console.log(allArray.filter(function(v,i) {
-                        //return v[2] === attribVal
-                        //console.log(v)
-                    }))*/
                 }
             }
         })
@@ -267,8 +250,6 @@ function dragIEnd() {
         landingPad.removeEventListener('dragover',dragOver)
     })
 }
-
-
 function dragEnter() {
     bOver = true
     overObject = this
@@ -382,21 +363,49 @@ function addRemove() {
         case 'recipe':
             switch(whatDo) {
                 case 'add':
-                    document.getElementById('selectedThings').appendChild(parentItem)
+                    //let addedThing = document.getElementById('selectedThings').appendChild(parentItem)
+                    let addedThing = document.getElementById('selectedThings')
+                    addedThing.appendChild(parentItem)
+                    parentItem.querySelectorAll('.up-down')[0].addEventListener('click',expandContract)
+                    parentItem.querySelectorAll('.left-right')[0].addEventListener('click',addRemove)
                     document.getElementById('evolvedrecipe').classList.add("noShow")
-                    //call makeIngredientSlots
-                    //call tallyTheThings
-                    //hide #evolvedrecipe
+                    makeIngredientSlots(parentItem)
+                    tallyTheThings()
                     break
                 case 'remove':
                     document.getElementById('selectedThings').innerHTML = ''
                     document.getElementById('evolvedrecipe').classList.remove('noShow')
-                    //set the innerHTML of #selectedThings to ''
-                    //unhide #evolvedrecipe
                     break
             }
             break
         case 'foodItem':
+            switch(whatDo) {
+                case 'add':
+                    //find the first emptyOLLI
+                    let emptySlots = document.querySelectorAll('.emptyOLLI')
+                    if (emptySlots.length == 0) {
+                        alert("no empty slots - remove an ingredient first")
+                    } else {
+                        let newParent = parentItem.cloneNode(true)
+                        //console.log(newParent)
+                        newParent.querySelectorAll('.up-down')[0].addEventListener('click',expandContract)
+                        newParent.querySelectorAll('.left-right')[0].addEventListener('click',addRemove)
+                        emptySlots[0].appendChild(newParent)
+                        emptySlots[0].classList.remove('emptyOLLI')
+                        //re-add the eventlisteners
+                        tallyTheThings()
+                    }
+                    break
+                case 'remove':
+                    //set the innerHTML of the clicked item's LI to ''
+                    let parentLI = this.parentElement.parentElement.parentElement
+                    parentLI.innerHTML = ''
+                    //call tallyTheThings()
+                    tallyTheThings()
+                    //re-add emptyOLLI
+                    parentLI.classList.add('emptyOLLI')
+                    break
+            }
             break
     }
 }
