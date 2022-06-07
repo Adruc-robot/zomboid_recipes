@@ -61,22 +61,36 @@ async function main() {
     let idI = 0
     allArray.forEach(item => {
         //main div
-        let  parentEl = document.createElement("div")
+        let parentEl = document.createElement("div")
         document.getElementById(item[6]).appendChild(parentEl)
         parentEl.classList.add(item[1])
+        //icon-title holder
+        let iconTitle = document.createElement("div")
+        iconTitle.classList.add('icon-title')
+        parentEl.appendChild(iconTitle)
         //icon
         let icon = document.createElement('img')
         icon.classList.add("item-icon")
-        parentEl.appendChild(icon)
+        iconTitle.appendChild(icon)
         //title
         let titleEl = document.createElement('h3')
         titleEl.classList.add(item[3])
         let itemName = item[2].substring(0,item[2].indexOf('{')).trim()
         titleEl.innerText = itemName
-        parentEl.appendChild(titleEl)
+        iconTitle.appendChild(titleEl)
+        //expand/contract icon
+        let downChevron = document.createElement('i')
+        downChevron.classList.add('fa-solid', 'fa-chevron-down', 'up-down')
+        downChevron.addEventListener('click',expandContract)
+        iconTitle.appendChild(downChevron)
+        //add/remove icon
+        let rightChevron = document.createElement('i')
+        rightChevron.classList.add('fa-solid','fa-chevron-right', 'left-right')
+        rightChevron.addEventListener('click',addRemove)
+        iconTitle.appendChild(rightChevron)
         //ul
         let attribEl = document.createElement('ul')
-        attribEl.classList.add(item[4])
+        attribEl.classList.add(item[4], "noShow")
         parentEl.appendChild(attribEl)
         //create a "name" attribute
         let nameAttrib = document.createElement('li')
@@ -109,26 +123,43 @@ async function main() {
                 let attribVal = attribSpl[1].trim()
                 rightSpan.innerText = attribVal
                 liEl.appendChild(rightSpan)
+                if (attribName == 'Icon') {
+                    let thing1 = `/img/Item_${attribVal}.png`
+                    icon.src = thing1
+                }
                 if (attribName == 'ResultItem') {
                     //need to get the icon from here
                     //let tmpFlter = new RegExp(attribVal + "\\r")
                     //console.log(tmpFlter)
-                    console.log(`looking for: ${attribVal}`)
+                    //console.log(`looking for: ${attribVal}`)
                     let doots = allArray.filter(function(v,i) {
                         
                         return v[2].substring(0,v[2].indexOf('{')).trim() === attribVal
                     })
+                    //console.log(doots)
+                    for (let ii = 0; ii < doots.length; ii++){
+                        if (doots[ii] !== item) {
+                            //console.log(item)
+                            //console.log(doots[ii][2])
+                            let thing1 = `/img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
+                            //test if it's there
+                            //let checker = getThings(thing1)
+                            //console.log(checker)
+                            icon.src = thing1
+                        }
+
+                    }
                     doots.forEach(doot => {
                         if (doot != item) {
-                            console.log('fullstring')
-                            console.log(doot[2].substring(0,50))
-                            /*console.log(doot[2].indexOf('Icon = '))
-                            console.log(doot[2].substring(doot[2].indexOf('Icon = '),doot[2].length).indexOf(',') + doot[2].indexOf('Icon = '))*/
-                            //console.log(doot[2].substring(doot[2].indexOf(/\s+Icon =\s+/),doot[2].substring(doot[2].indexOf(/\s+Icon =\s+/),doot[2].length).indexOf(',')).trim())
-                            console.log(doot[2].substring(doot[2].indexOf('Icon = '),doot[2].length))
-                            console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length))
-                            //console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).substring(0,doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).indexOf(',')))
-                            console.log(doot[2].substring(doot[2].indexOf('Icon = ') + 7,doot[2].length).indexOf(','))
+                            /*let thing1 = `/img/Item_${doot[2].split('Icon = ')[1].substring(0,doot[2].split('Icon = ')[1].indexOf(','))}.png`
+                            //test if it's there
+                            let checker = getThings(path)
+                            console.log(checker)
+                            icon.src = thing1*/
+
+
+                            
+                            //console.log(thing1)
                         }
                     })
                     //console.log(doot)
@@ -311,4 +342,61 @@ function searchFilter() {
             filterItem.classList.remove("noShow")
         }
     })
+}
+function expandContract() {
+    if (this.classList.toString().includes('fa-chevron-down')) {
+        //expand
+        this.classList.remove('fa-chevron-down')
+        this.classList.add('fa-chevron-up')
+        this.parentElement.parentElement.querySelectorAll('ul')[0].classList.remove('noShow')
+    } else {
+        //contract
+        this.classList.remove('fa-chevron-up')
+        this.classList.add('fa-chevron-down')
+        this.parentElement.parentElement.querySelectorAll('ul')[0].classList.add('noShow')
+    }
+}
+function addRemove() {
+    //determine if this is a recipe or foodItem
+    let parentItem = this.parentElement.parentElement.cloneNode(true)
+    let chevronCheck = parentItem.querySelectorAll('.left-right')[0]
+    let whatTo = ''
+    let whatDo = ''
+    if (parentItem.classList.toString().includes('recipe')) {
+        whatTo = 'recipe'
+    } else {
+        whatTo = 'foodItem'
+    }
+    if (chevronCheck.classList.toString().includes('fa-chevron-right')) {
+        //add
+        chevronCheck.classList.remove('fa-chevron-right')
+        chevronCheck.classList.add('fa-chevron-left')
+        whatDo = 'add'
+    } else {
+        //remove
+        chevronCheck.classList.remove('fa-chevron-left')
+        chevronCheck.classList.add('fa-chevron-right')
+        whatDo = 'remove'
+    }
+    switch(whatTo) {
+        case 'recipe':
+            switch(whatDo) {
+                case 'add':
+                    document.getElementById('selectedThings').appendChild(parentItem)
+                    document.getElementById('evolvedrecipe').classList.add("noShow")
+                    //call makeIngredientSlots
+                    //call tallyTheThings
+                    //hide #evolvedrecipe
+                    break
+                case 'remove':
+                    document.getElementById('selectedThings').innerHTML = ''
+                    document.getElementById('evolvedrecipe').classList.remove('noShow')
+                    //set the innerHTML of #selectedThings to ''
+                    //unhide #evolvedrecipe
+                    break
+            }
+            break
+        case 'foodItem':
+            break
+    }
 }
