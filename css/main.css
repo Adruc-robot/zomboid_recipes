@@ -261,14 +261,22 @@ textarea {
   }
 }
 .icon-title {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+}
+.icon-title-button {
   display: grid;
-  grid-template-columns: 1.94em auto auto auto;
-  gap: 0.375em 0.375em;
-  grid-auto-flow: row;
+  grid-template-columns: auto auto;
   align-content: center;
   align-items: center;
   justify-items: start;
-  justify-content: start;
+  justify-content: space-between;
+}
+.buttonHolder i {
+  padding: 0.5rem;
 }
 /* custom styles begin */
 #displayer {
@@ -294,7 +302,7 @@ textarea {
 }
 
 
-.noShow {
+.noShow, .filterNoShow {
   display: none;
 }
 .header {
@@ -306,6 +314,9 @@ textarea {
 }
 #selectedThings li .Type, #selectedThings li .DisplayCategory, #selectedThings li .Weight, #selectedThings li .Icon, #selectedThings li .CannedFood, #selectedThings li .EatType, #selectedThings li .EvolvedRecipeName, #selectedThings li .FoodType, #selectedThings li .Packaged, #selectedThings li .DaysFresh, #selectedThings li .DaysTotallyRotten, #selectedThings li .StaticModel, #selectedThings li .WorldStaticModel, #selectedThings li .ReplaceOnUse, #selectedThings li .EvolvedRecipe,#selectedThings li .BadCold, #selectedThings li .BadInMicrowave, #selectedThings li .DangerousUncooked, #selectedThings li .GoodHot, #selectedThings li .IsCookable, #selectedThings li .MinutesToCook, #selectedThings li .MinutesToBurn, #selectedThings li .HerbalistType, #selectedThings li .OnEat {
   display: none;
+}
+.icon-title img {
+  padding: 0 0.3125rem 0 0.0625rem;
 }
 .dragLanding {
   border-style: dashed;
