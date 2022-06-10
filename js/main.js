@@ -14,8 +14,9 @@ domReady(function() {
 })
 
 async function main() {
-    let folderString = await getThings('/txtFiles/')
-    let fileArray = folderString.substring(folderString.indexOf("href=\""), folderString.length).split("href=\"")
+    //let folderString = await getThings('/txtFiles/')
+    let folderString = await getThings('txtFiles/')
+    let fileArray = folderString.substring(folderString.indexOf('href="/'), folderString.length).split('href="/')
     let allArray = new Array()
     for (let i = 0; i < fileArray.length; i++) {
         let el = fileArray[i]
@@ -137,7 +138,8 @@ async function main() {
                 rightSpan.innerText = attribVal
                 liEl.appendChild(rightSpan)
                 if (attribName == 'Icon') {
-                    let thing1 = `/img/Item_${attribVal}.png`
+                    //let thing1 = `/img/Item_${attribVal}.png`
+                    let thing1 = `img/Item_${attribVal}.png`
                     icon.src = thing1
                 }
                 if (attribName == 'ResultItem') {
@@ -149,7 +151,8 @@ async function main() {
                     //console.log(doots)
                     for (let ii = 0; ii < doots.length; ii++){
                         if (doots[ii] !== item) {
-                            let thing1 = `/img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
+                            //let thing1 = `/img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
+                            let thing1 = `img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
                             icon.src = thing1
                         }
 
