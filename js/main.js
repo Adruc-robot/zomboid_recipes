@@ -14,13 +14,21 @@ domReady(function() {
 })
 
 async function main() {
-    let folderString = await getThings('/txtFiles/')
-    let fileArray = folderString.substring(folderString.indexOf("href=\""), folderString.length).split("href=\"")
+    let folderString = await (await getThings('txtFiles/')).toLowerCase()
+    let fileArray = folderString.substring(folderString.indexOf('href="/'), folderString.length).split('href="/')
+    //let fileArray = folderString.toLowerCase().substring()
+    //let fileArray = folderString.substring(folderString.indexOf('HREF="'), folderString.length).split('HREF="')
+    //console.log(fileArray)
     let allArray = new Array()
     for (let i = 0; i < fileArray.length; i++) {
         let el = fileArray[i]
         if (el.includes('.txt')) {
-            let filePath = el.substring(0, el.indexOf('" class="'))
+            //console.log(el)
+            //let filePath = el.substring(0, el.indexOf('" class="'))
+            let filePath = el.substring(0, el.indexOf('"'))
+            console.log(filePath)
+            //let filePath = el.substring(el.indexOf('txtFiles/'),el.indexOf('">'))
+
             let fileText = await getThings(filePath)
             let splitString = ''
             let filterString = ''
@@ -92,7 +100,9 @@ async function main() {
         downChevron.classList.add('fa-solid', 'fa-chevron-down', 'up-down')
         downChevron.dataset.adrucTargetElement = `#ul${item[1]}${idI}`
         downChevron.addEventListener('click',expandContract)
-        buttonHolder.appendChild(downChevron)
+        //buttonHolder.appendChild(downChevron)
+        //for BRANDON
+        iconTitle.appendChild(downChevron)
         //add/remove icon
         let rightChevron = document.createElement('i')
         rightChevron.classList.add('fa-solid','fa-chevron-right', 'left-right')
@@ -137,7 +147,8 @@ async function main() {
                 rightSpan.innerText = attribVal
                 liEl.appendChild(rightSpan)
                 if (attribName == 'Icon') {
-                    let thing1 = `/img/Item_${attribVal}.png`
+                    //let thing1 = `/img/Item_${attribVal}.png`
+                    let thing1 = `img/Item_${attribVal}.png`
                     icon.src = thing1
                 }
                 if (attribName == 'ResultItem') {
@@ -149,7 +160,8 @@ async function main() {
                     //console.log(doots)
                     for (let ii = 0; ii < doots.length; ii++){
                         if (doots[ii] !== item) {
-                            let thing1 = `/img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
+                            //let thing1 = `/img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
+                            let thing1 = `img/Item_${doots[ii][2].split('Icon = ')[1].substring(0,doots[ii][2].split('Icon = ')[1].indexOf(','))}.png`
                             icon.src = thing1
                         }
 
@@ -281,11 +293,12 @@ function addRemove() {
         case 'recipe':
             switch(whatDo) {
                 case 'add':
+                    document.getElementById("evolvedrecipe").classList.add("test")
                     let addedThing = document.getElementById('selectedThings')
                     addedThing.appendChild(parentItem)
                     parentItem.querySelectorAll('.up-down')[0].addEventListener('click',expandContract)
                     parentItem.querySelectorAll('.left-right')[0].addEventListener('click',addRemove)
-                    document.getElementById('evolvedrecipe').classList.add("noShow")
+                    //document.getElementById('evolvedrecipe').classList.add("noShow")
                     //let EvolvedRecipes = document.querySelectorAll('#item .EvolvedRecipe .valuePair')
                     let allFoodItems = document.querySelectorAll('.foodItem')
                     allFoodItems.forEach(item => {

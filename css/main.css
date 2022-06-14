@@ -281,16 +281,31 @@ textarea {
 /* custom styles begin */
 #displayer {
 
-  display: grid; 
+  /*display: grid; 
   grid-template-columns: 1fr 1fr 1fr; 
   grid-template-rows: 10vh 90vh;
   gap: 2px 2px; 
   grid-template-areas:
   "header header header"
   ". . . ";
-  height: 100vh;
-}
+  height: 100vh;*/
+  display: grid; 
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 50% 50%; 
+  grid-template-rows: 1.5em 30em 4em 30em;
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "recipe_search tabulated"
+    "recipe_list tabulated"
+    "ingredient_search tabulated"
+    "ingredient_list tabulated"; 
 
+}
+.tabulated { grid-area: tabulated; }
+.recipe_search { grid-area: recipe_search; }
+.recipe_list { grid-area: recipe_list; }
+.ingredient_search { grid-area: ingredient_search; }
+.ingredient_list { grid-area: ingredient_list; }
 .afterColon::after {
   content: ": ";
 }
@@ -340,12 +355,22 @@ ol li {
   align-content: center;
   align-items: center;
 }
-/*.compress {
-  max-height: 0px;
-  transition: max-height .5s cubic-bezier(0, 1, 0, 1);
+.test {
+	position: fixed;
+	top: -50em;  
+	transition: all 1s ease;
 }
-.compress.expand li {
-  max-height: 99em;
-  transition: max-height .5s ease-in-out;
+
+/*.moveUp {
+  position: fixed;
+    top: 0;
+    right: -600px;
+    transition: all 1s ease;
+}
+.moveDown {
+  position: fixed;
+    top: 0;
+    right: -600px;
+    transition: all 1s ease;
 }*/
 /* custom styles end */

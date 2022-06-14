@@ -28,19 +28,30 @@
 </head>
 
 <body>
-  <div id="displayer" class="gContainer">
-    <div class="header">here is information</div>
-    <!--<div id="evolvedrecipe" class="accordion">-->
+  <div class="header">here is information</div>
+  <div id="displayer" class="container">
+    <div id="selectedThings" class="tabulated"></div>
+    <div class="recipe_search">
+      <input class="general-search" type="text" placeholder="search for recipe..." data-adruc-ftarget=".recipe" data-adruc-compare-location=".recipeTitle">
+    </div>
+    <div id="evolvedrecipe" class="recipe_list"></div>
+    <div class="ingredient_search">
+      <input class="general-search" type="text" placeholder="search for ingredient..." data-adruc-ftarget=".foodItem" data-adruc-compare-location=".foodItemTitle">
+    </div>
+    <div id="item" class="ingredient_list"></div>
+  </div>
+  <!--<div id="displayer" class="gContainer">
+    
       <div id="evolvedrecipe">
         <input class="general-search" type="text" placeholder="search for recipe..." data-adruc-ftarget=".recipe" data-adruc-compare-location=".recipeTitle">
       </div>
-      <!--<div id="item" class="accordion">-->
+      
         <div id="item">
           <input class="general-search" type="text" placeholder="search for ingredient..." data-adruc-ftarget=".foodItem" data-adruc-compare-location=".foodItemTitle">
         </div>
-        <!--<div id="selectedThings" class="accordion"></div>-->
+      
         <div id="selectedThings"></div>
-      </div>
+      </div>-->
       <script src="js/main.js"></script>
   </body>
     
