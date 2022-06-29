@@ -7,6 +7,7 @@ translations['Carbohydrates'] = 'Carbohydrates'
 translations['Proteins'] = 'Proteins'
 translations['Lipids'] = 'Fat'
 const levelMultiplerArray = []
+const sourceLoc = 'txtFiles/'
 levelMultiplerArray[0] = 1
 levelMultiplerArray[1] = 1/15 + 1
 levelMultiplerArray[2] = 2/15 + 1
@@ -33,7 +34,7 @@ domReady(function() {
 })
 
 async function main() {
-    let folderString = await (await getThings('txtFiles/')).toLowerCase()
+    let folderString = await (await getThings(sourceLoc)).toLowerCase()
     let fileArray = folderString.substring(folderString.indexOf('href="/'), folderString.length).split('href="/')
     //let fileArray = folderString.toLowerCase().substring()
     //let fileArray = folderString.substring(folderString.indexOf('HREF="'), folderString.length).split('HREF="')
@@ -42,10 +43,8 @@ async function main() {
     for (let i = 0; i < fileArray.length; i++) {
         let el = fileArray[i]
         if (el.includes('.txt')) {
-            //console.log(el)
-            //let filePath = el.substring(0, el.indexOf('" class="'))
-            let filePath = el.substring(0, el.indexOf('"'))
-            //console.log(filePath)
+            //let filePath = el.substring(0, el.indexOf('"'))
+            let filePath = el.substring(el.indexOf(sourceLoc.toLowerCase()), el.indexOf('"'))
             //let filePath = el.substring(el.indexOf('txtFiles/'),el.indexOf('">'))
 
             let fileText = await getThings(filePath)
