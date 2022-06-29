@@ -260,6 +260,12 @@ textarea {
     page-break-after: avoid;
   }
 }
+/* custom styles begin */
+.header {
+  width: 90vw;
+  margin: 0 auto;
+  padding-top: 1vh;
+}
 .icon-title {
   display: flex;
   flex-wrap: nowrap;
@@ -278,34 +284,48 @@ textarea {
 .buttonHolder i {
   padding: 0.5rem;
 }
-/* custom styles begin */
+
 #displayer {
-
-  /*display: grid; 
-  grid-template-columns: 1fr 1fr 1fr; 
-  grid-template-rows: 10vh 90vh;
-  gap: 2px 2px; 
-  grid-template-areas:
-  "header header header"
-  ". . . ";
-  height: 100vh;*/
+  width: 80vw;
+  margin: 0 auto;
   display: grid; 
-  grid-auto-columns: 1fr; 
-  grid-template-columns: 50% 50%; 
-  grid-template-rows: 1.5em 30em 4em 30em;
-  gap: 0px 0px; 
-  grid-template-areas: 
-    "recipe_search tabulated"
-    "recipe_list tabulated"
-    "ingredient_search tabulated"
-    "ingredient_list tabulated"; 
-
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 75vh;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "leftSide tabulated"
 }
+
+/*.container {  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 30em 30em;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "recipe_list tabulated"
+    "ingredient_list tabulated";
+}*/
+
 .tabulated { grid-area: tabulated; }
-.recipe_search { grid-area: recipe_search; }
-.recipe_list { grid-area: recipe_list; }
+.leftSide { grid-area: leftSide;}
+.collapsed {
+  max-height: 0vh;
+  transition: max-height 0.5s;
+}
+.expanded {
+  max-height: 75vh;
+  transition: max-height 0.5s;
+}
+/*.recipe_search { grid-area: recipe_search; }*/
+/*.recipe_list { grid-area: recipe_list; }*/
+/*.recipe_list { 
+  grid-area: recipe_list; 
+  max-height: 99em;
+  transition: max-height 1s;
+}
 .ingredient_search { grid-area: ingredient_search; }
-.ingredient_list { grid-area: ingredient_list; }
+.ingredient_list { grid-area: ingredient_list; }*/
 .afterColon::after {
   content: ": ";
 }
@@ -327,6 +347,7 @@ textarea {
 #item, #evolvedrecipe {
   overflow-y: scroll;
 }
+
 #selectedThings li .Type, #selectedThings li .DisplayCategory, #selectedThings li .Weight, #selectedThings li .Icon, #selectedThings li .CannedFood, #selectedThings li .EatType, #selectedThings li .EvolvedRecipeName, #selectedThings li .FoodType, #selectedThings li .Packaged, #selectedThings li .DaysFresh, #selectedThings li .DaysTotallyRotten, #selectedThings li .StaticModel, #selectedThings li .WorldStaticModel, #selectedThings li .ReplaceOnUse, #selectedThings li .EvolvedRecipe,#selectedThings li .BadCold, #selectedThings li .BadInMicrowave, #selectedThings li .DangerousUncooked, #selectedThings li .GoodHot, #selectedThings li .IsCookable, #selectedThings li .MinutesToCook, #selectedThings li .MinutesToBurn, #selectedThings li .HerbalistType, #selectedThings li .OnEat {
   display: none;
 }
@@ -354,11 +375,6 @@ ol li {
   flex-direction: row;
   align-content: center;
   align-items: center;
-}
-.test {
-	position: fixed;
-	top: -50em;  
-	transition: all 1s ease;
 }
 
 /*.moveUp {
