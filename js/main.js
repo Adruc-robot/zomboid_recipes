@@ -38,7 +38,6 @@ async function main() {
     let fileArray = folderString.substring(folderString.indexOf('href="/'), folderString.length).split('href="/')
     //let fileArray = folderString.toLowerCase().substring()
     //let fileArray = folderString.substring(folderString.indexOf('HREF="'), folderString.length).split('HREF="')
-    //console.log(fileArray)
     let allArray = new Array()
     for (let i = 0; i < fileArray.length; i++) {
         let el = fileArray[i]
@@ -525,12 +524,16 @@ function addRemove() {
                     break
                 case 'remove':
                     //set the innerHTML of the clicked item's LI to ''
-                    let parentLI = this.parentElement.parentElement.parentElement
+                    let parentLI = this.parentElement
+                    //crawl upwards until the LI is hit
+                    while (parentLI.tagName !== "LI") {
+                        parentLI = parentLI.parentElement
+                    }
                     parentLI.innerHTML = ''
-                    //call tallyTheThings()
-                    tallyTheThings()
                     //re-add emptyOLLI
                     parentLI.classList.add('emptyOLLI')
+                    //call tallyTheThings()
+                    tallyTheThings()
                     break
             }
             break

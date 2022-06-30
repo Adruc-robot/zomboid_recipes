@@ -308,7 +308,10 @@ textarea {
 }*/
 
 .tabulated { grid-area: tabulated; }
-.leftSide { grid-area: leftSide;}
+.leftSide { 
+  grid-area: leftSide;
+  padding: 1em;
+}
 .collapsed {
   max-height: 0vh;
   transition: max-height 0.5s;
@@ -346,6 +349,9 @@ textarea {
 
 #item, #evolvedrecipe {
   overflow-y: scroll;
+}
+#selectedThings {
+  padding: 1em;
 }
 
 #selectedThings li .Type, #selectedThings li .DisplayCategory, #selectedThings li .Weight, #selectedThings li .Icon, #selectedThings li .CannedFood, #selectedThings li .EatType, #selectedThings li .EvolvedRecipeName, #selectedThings li .FoodType, #selectedThings li .Packaged, #selectedThings li .DaysFresh, #selectedThings li .DaysTotallyRotten, #selectedThings li .StaticModel, #selectedThings li .WorldStaticModel, #selectedThings li .ReplaceOnUse, #selectedThings li .EvolvedRecipe,#selectedThings li .BadCold, #selectedThings li .BadInMicrowave, #selectedThings li .DangerousUncooked, #selectedThings li .GoodHot, #selectedThings li .IsCookable, #selectedThings li .MinutesToCook, #selectedThings li .MinutesToBurn, #selectedThings li .HerbalistType, #selectedThings li .OnEat {
